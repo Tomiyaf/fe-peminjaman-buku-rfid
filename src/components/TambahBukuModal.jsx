@@ -73,10 +73,10 @@ function TambahBukuModal() {
                 max={2100}
               />
             </div>
-            <div className="grid gap-3">
+            {/* <div className="grid gap-3">
               <Label htmlFor="total">Total</Label>
               <Input id="total" name="total" type="number" min={0} max={9999} />
-            </div>
+            </div> */}
           </div>
           <DialogFooter>
             <DialogClose asChild>
