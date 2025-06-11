@@ -39,7 +39,7 @@ function ListMember() {
         {/* <Button className="bg-green-500 text-white hover:bg-green-400 hover:text-white hover:cursor-pointer">
           Tambah Pengguna Baru +
         </Button> */}
-        <TambahMemberModal />
+        <TambahMemberModal onSave={() => setUpdate(update + 1)} />
       </div>
       <Table>
         <TableCaption>Daftar member yang sudah ditambahkan</TableCaption>
