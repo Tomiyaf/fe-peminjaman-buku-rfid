@@ -1,20 +1,24 @@
 import api from "../lib/axios";
 
-const base = "/members";
+const base = "/books";
 
-class MemberService {
-  async createMember({
-    name,
-    memberId,
+class BookService {
+  async createBook({
+    title,
+    author,
+    publishYear,
+    isbn,
     rfidTagId 
   }) {
     try {
       const res = api.post(
         `${base}`,
         { 
-          name: name, 
-          memberId: memberId, 
-          rfidTagId: rfidTagId 
+          title: title, 
+          author: author,
+          publishYear: publishYear, 
+          isbn: isbn, 
+          rfidTagId: rfidTagId
         }
       );
       return (await res).data;
@@ -23,17 +27,21 @@ class MemberService {
     }
   }
 
-  async updateMember({
+  async updateBook({
     id,
-    name,
-    memberId
+    title,
+    author,
+    publishYear,
+    isbn,
   }) {
     try {
       const res = api.put(
         `${base}/${id}`,
         {
-          ...(name != null && { name: name }),
-          ...(memberId != null && { memberId: memberId })
+          ...(title != null && { title: title }),
+          ...(author != null && { author: author }),
+          ...(publishYear != null && { publishYear: publishYear }),
+          ...(isbn != null && { isbn: isbn }),
         }
       );
       return (await res).data;
@@ -42,7 +50,7 @@ class MemberService {
     }
   }
 
-  async getMembers() {
+  async getBooks() {
     try {
       return (await api.get(`${base}`)).data;
     } catch (e) {
@@ -50,7 +58,7 @@ class MemberService {
     }
   }
 
-  async getMemberById(id) {
+  async getBookById(id) {
     try {
       return (await api.get(`${base}/${id}`)).data;
     } catch (e) {
@@ -58,7 +66,7 @@ class MemberService {
     }
   }
 
-  async deleteMember(id) {
+  async deleteBook(id) {
     try {
       return (await api.delete(`${base}/${id}`)).data;
     } catch (e) {
@@ -67,4 +75,4 @@ class MemberService {
   }
 }
 
-export default new MemberService();
+export default new BookService();
