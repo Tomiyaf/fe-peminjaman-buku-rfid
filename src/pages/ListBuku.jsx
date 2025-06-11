@@ -21,15 +21,15 @@ import { Button } from "@/components/ui/button";
 import EditBukuCard from "../components/EditBukuCard";
 import TambahBukuModal from "../components/TambahBukuModal";
 import BookService from "../services/BookService";
+import RFIDService from "../services/RFIDService";
 
 function ListBuku() {
   const [books, setBooks] = useState([]);
+  const [update, setUpdate] = useState(0);
 
   useEffect(() => {
-    (async () => {
-      await BookService.getBooks().then(v => setBooks(v));
-    })()
-  }, []);
+    BookService.getBooks().then(v => setBooks(v));
+  }, [update]);
 
   return (
     <div className="">
@@ -38,7 +38,7 @@ function ListBuku() {
         {/* <Button className="bg-green-500 text-white hover:bg-green-400 hover:text-white hover:cursor-pointer">
           Tambah Buku Baru +
         </Button> */}
-        <TambahBukuModal />
+        <TambahBukuModal onSave={() => setUpdate(update + 1)} />
       </div>
       <Table>
         <TableCaption>Daftar buku yang sudah ditambahkan</TableCaption>
@@ -71,7 +71,7 @@ function ListBuku() {
                 Sisa: {buku.status.sisa}
               </TableCell> */}
               <TableCell className="flex gap-2">
-                <EditBukuCard buku={buku} />
+                <EditBukuCard buku={buku} onSave={() => setUpdate(update + 1)} />
                 <Dialog>
                   <DialogTrigger>
                     <Button className="bg-red-500 text-white hover:bg-red-400 hover:text-white hover:cursor-pointer">
@@ -88,9 +88,9 @@ function ListBuku() {
                         <Button
                           variant="destructive"
                           className="bg-red-500 text-white hover:bg-red-400 hover:text-white hover:cursor-pointer"
-                          onClick={() => {
-                            // Logic to delete the book
-                            console.log(`Deleting book with ID: ${buku.id}`);
+                          onClick={async () => {
+                            await BookService.deleteBook(buku.id);
+                            setUpdate(update + 1);
                           }}
                         >
                           Hapus
