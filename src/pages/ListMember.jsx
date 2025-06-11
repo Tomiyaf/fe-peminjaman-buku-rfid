@@ -24,12 +24,13 @@ import MemberService from "../services/MemberService";
 
 function ListMember() {
   const [users, setUsers] = useState([]);
+  const [update, setUpdate] = useState(0);
 
   useEffect(() => {
     (async () => {
       await MemberService.getMembers().then(v => setUsers(v))
     })()
-  }, []);
+  }, [update]);
 
   return (
     <div className="">
@@ -57,7 +58,7 @@ function ListMember() {
               <TableCell className="font-mono">{user.rfidTagId}</TableCell>
               <TableCell>{user.name}</TableCell>
               <TableCell className="flex gap-2">
-                <EditPenggunaCard pengguna={user} />
+                <EditPenggunaCard pengguna={user} onSave={() => setUpdate(update + 1)} />
                 <Dialog>
                   <DialogTrigger>
                     <Button className="bg-red-500 text-white hover:bg-red-400 hover:text-white hover:cursor-pointer">
@@ -75,9 +76,9 @@ function ListMember() {
                         <Button
                           variant="destructive"
                           className="bg-red-500 text-white hover:bg-red-400 hover:text-white hover:cursor-pointer"
-                          onClick={() => {
-                            // Logic to delete the book
-                            console.log(`Deleting member with ID: ${user.id}`);
+                          onClick={async () => {
+                            await MemberService.deleteMember(user.id);
+                            setUpdate(update + 1);
                           }}
                         >
                           Hapus

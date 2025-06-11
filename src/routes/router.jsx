@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import ListBuku from "../pages/ListBuku.jsx";
-import ListMember from "../pages/ListPengguna.jsx";
+import ListMember from "../pages/ListMember.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import Peminjaman from "../pages/Peminjaman.jsx";
 const router = createBrowserRouter([

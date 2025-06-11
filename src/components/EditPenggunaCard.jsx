@@ -11,9 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import MemberService from "../services/MemberService";
+import { useState } from "react";
 
-function EditPenggunaCard({ pengguna }) {
+function EditPenggunaCard({ pengguna, onSave }) {
   console.log(pengguna);
+  const [newName, setNewName] = useState(pengguna.name);
+
   return (
     <Dialog>
       <form>
@@ -36,7 +40,7 @@ function EditPenggunaCard({ pengguna }) {
           <div className="grid gap-4">
             <div className="grid gap-3">
               <Label htmlFor="judul">Nama</Label>
-              <Input id="nama" name="nama" defaultValue={pengguna.nama} />
+              <Input id="nama" name="nama" value={newName} onChange={e => setNewName(e.target.value)} />
             </div>
           </div>
           <DialogFooter>
@@ -50,8 +54,15 @@ function EditPenggunaCard({ pengguna }) {
             </DialogClose>
             <DialogClose>
               <Button
-                type="submit"
                 className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white hover:cursor-pointer"
+                onClick={async () => {
+                  console.log(newName)
+                  await MemberService.updateMember({ 
+                    id: pengguna.id,
+                    name: newName
+                  });
+                  onSave();
+                }}
               >
                 Simpan
               </Button>
