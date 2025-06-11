@@ -11,32 +11,48 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import dataRFID from "../mocks/dataRFID";
 
-function EditPenggunaCard({ pengguna }) {
-  console.log(pengguna);
+function TambahMemberModal() {
   return (
     <Dialog>
       <form>
         <DialogTrigger asChild>
           <Button
             variant="outline"
-            className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white hover:cursor-pointer"
+            className="bg-green-500 text-white hover:bg-green-400 hover:text-white hover:cursor-pointer"
           >
-            Edit
+            Tambah Member +
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit Data Pengguna</DialogTitle>
+            <DialogTitle>Tambah Member Baru</DialogTitle>
             <DialogDescription>
-              Membuat perubahan data pengguna di sini. Klik simpan untuk
-              menyimpan data.
+              Menambahkan data member baru di sini. Klik simpan untuk menyimpan
+              data.
             </DialogDescription>
           </DialogHeader>
+          <div className="grid gap-3">
+            <Label htmlFor="rfid">UID RFID</Label>
+            <select
+              id="rfid"
+              name="rfid"
+              className="border rounded px-2 py-1"
+              required
+            >
+              <option value="">Pilih UID RFID</option>
+              {dataRFID.map((item) => (
+                <option key={item.uid} value={item.uid}>
+                  {item.uid}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="grid gap-4">
             <div className="grid gap-3">
-              <Label htmlFor="judul">Nama</Label>
-              <Input id="nama" name="nama" defaultValue={pengguna.nama} />
+              <Label htmlFor="nama">Nama</Label>
+              <Input id="nama" name="nama" />
             </div>
           </div>
           <DialogFooter>
@@ -61,4 +77,4 @@ function EditPenggunaCard({ pengguna }) {
   );
 }
 
-export default EditPenggunaCard;
+export default TambahMemberModal;

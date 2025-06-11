@@ -4,7 +4,7 @@ const dataBuku = [
     rfid: "RFID001",
     judul: "Pemrograman Web dengan React",
     pengarang: "Andi Nugroho",
-    penerbit: "Elex Media Komputindo",
+    isbn: "9786020451234",
     tahun: 2022,
     status: {
       total: 10,
@@ -17,7 +17,7 @@ const dataBuku = [
     rfid: "RFID002",
     judul: "Struktur Data dan Algoritma",
     pengarang: "Sinta Kurniawati",
-    penerbit: "Gramedia",
+    isbn: "9789792912345",
     tahun: 2021,
     status: {
       total: 5,
@@ -30,7 +30,7 @@ const dataBuku = [
     rfid: "RFID003",
     judul: "Jaringan Komputer Dasar",
     pengarang: "Budi Santosa",
-    penerbit: "Informatika Bandung",
+    isbn: "9786021234567",
     tahun: 2020,
     status: {
       total: 7,
@@ -43,7 +43,7 @@ const dataBuku = [
     rfid: "RFID004",
     judul: "Kecerdasan Buatan: Teori dan Praktik",
     pengarang: "Rina Wijaya",
-    penerbit: "Andi Publisher",
+    isbn: "9786029876543",
     tahun: 2023,
     status: {
       total: 8,
@@ -56,7 +56,7 @@ const dataBuku = [
     rfid: "RFID005",
     judul: "Sistem Operasi Modern",
     pengarang: "Dedi Haryanto",
-    penerbit: "Prenada Media",
+    isbn: "9786021122334",
     tahun: 2019,
     status: {
       total: 6,
