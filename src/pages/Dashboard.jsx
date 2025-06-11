@@ -23,6 +23,10 @@ function Dashboard() {
           <span>Total Member</span>
           <span>9</span>
         </div>
+        <div className="flex flex-col border-l-4 border-blue-500 rounded-sm shadow-md px-10 py-10 w-full">
+          <span>Pengunjung Hari Ini</span>
+          <span>9</span>
+        </div>
       </div>
       <div className="w-xl rounded-sm shadow-md p-5 mt-10">
         <ChartPeminjamanBuku data={dataPeminjamanChart} />

@@ -48,10 +48,10 @@ const data = {
           title: "List Pengguna",
           url: "list-pengguna",
         },
-        {
-          title: "Tambah Pengguna",
-          url: "tambah-pengguna",
-        },
+        // {
+        //   title: "Tambah Pengguna",
+        //   url: "tambah-pengguna",
+        // },
       ],
     },
     {

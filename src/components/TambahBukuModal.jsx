@@ -11,52 +11,57 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import dataRFID from "../mocks/dataRFID";
 
-function EditBukuCard({ buku }) {
-  console.log(buku);
+function TambahBukuModal() {
   return (
     <Dialog>
       <form>
         <DialogTrigger asChild>
           <Button
             variant="outline"
-            className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white hover:cursor-pointer"
+            className="bg-green-500 text-white hover:bg-green-400 hover:text-white hover:cursor-pointer"
           >
-            Edit
+            Tambah Buku +
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit Data Buku</DialogTitle>
+            <DialogTitle>Tambah Data Buku</DialogTitle>
             <DialogDescription>
-              Membuat perubahan data buku di sini. Klik simpan untuk menyimpan
-              data.
+              Isi data buku di sini. Klik simpan untuk menyimpan data.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4">
+            {/* UID RFID */}
+            <div className="grid gap-3">
+              <Label htmlFor="uid">UID RFID</Label>
+              <select
+                id="uid"
+                name="uid"
+                className="border rounded px-2 py-1"
+                required
+              >
+                <option value="">Pilih UID RFID</option>
+                {dataRFID.map((item, idx) => (
+                  <option key={item.uid} value={item.uid}>
+                    {item.uid}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* ...field lainnya... */}
             <div className="grid gap-3">
               <Label htmlFor="judul">Judul</Label>
-              <Input id="judul" name="name" defaultValue={buku.judul} />
+              <Input id="judul" name="judul" />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="pengarang">Pengarang</Label>
-              <Input
-                id="pengarang"
-                name="username"
-                defaultValue={buku.pengarang}
-              />
+              <Input id="pengarang" name="pengarang" />
             </div>
-            {/* <div className="grid gap-3">
-              <Label htmlFor="penerbit">Penerbit</Label>
-              <Input
-                id="penerbit"
-                name="penerbit"
-                defaultValue={buku.penerbit}
-              />
-            </div> */}
             <div className="grid gap-3">
               <Label htmlFor="isbn">ISBN</Label>
-              <Input id="isbn" name="isbn" defaultValue={buku.isbn} />
+              <Input id="isbn" name="isbn" />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="tahunTerbit">Tahun Terbit</Label>
@@ -66,19 +71,11 @@ function EditBukuCard({ buku }) {
                 type="number"
                 min={1900}
                 max={2100}
-                defaultValue={buku.tahun}
               />
             </div>
             {/* <div className="grid gap-3">
               <Label htmlFor="total">Total</Label>
-              <Input
-                id="total"
-                name="total"
-                type="number"
-                min={0}
-                max={9999}
-                defaultValue={buku.status.total}
-              />
+              <Input id="total" name="total" type="number" min={0} max={9999} />
             </div> */}
           </div>
           <DialogFooter>
@@ -105,4 +102,4 @@ function EditBukuCard({ buku }) {
   );
 }
 
-export default EditBukuCard;
+export default TambahBukuModal;
