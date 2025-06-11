@@ -7,4 +7,9 @@ const api = axios.create({
   }
 });
 
+api.interceptors.response.use(r => {
+  console.log(r.data);
+  return r;
+});
+
 export default api;

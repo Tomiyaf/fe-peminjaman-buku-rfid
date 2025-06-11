@@ -41,12 +41,12 @@ const data = {
       // ],
     },
     {
-      title: "Pengguna",
+      title: "Member",
       url: "#",
       items: [
         {
-          title: "List Pengguna",
-          url: "list-pengguna",
+          title: "List Member",
+          url: "list-member",
         },
         // {
         //   title: "Tambah Pengguna",

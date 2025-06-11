@@ -1,3 +1,13 @@
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -7,24 +17,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import dataMember from "../mocks/dataMember";
+import { useEffect, useState } from "react";
 import EditPenggunaCard from "../components/EditPenggunaCard";
 import TambahMemberModal from "../components/TambahMemberModal";
+import MemberService from "../services/MemberService";
 
-function ListPengguna() {
+function ListMember() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      await MemberService.getMembers().then(v => setUsers(v))
+    })()
+  }, []);
+
   return (
     <div className="">
-      <h1 className="font-semibold text-xl">Daftar Pengguna</h1>
+      <h1 className="font-semibold text-xl">Daftar Member</h1>
       <div className="w-full flex justify-end">
         {/* <Button className="bg-green-500 text-white hover:bg-green-400 hover:text-white hover:cursor-pointer">
           Tambah Pengguna Baru +
@@ -32,7 +41,7 @@ function ListPengguna() {
         <TambahMemberModal />
       </div>
       <Table>
-        <TableCaption>Daftar pengguna yang sudah ditambahkan</TableCaption>
+        <TableCaption>Daftar member yang sudah ditambahkan</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">ID</TableHead>
@@ -42,11 +51,11 @@ function ListPengguna() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {dataMember.map((user, index) => (
+          {users.map((user, index) => (
             <TableRow key={index}>
               <TableCell className="font-medium">{user.id}</TableCell>
-              <TableCell className="font-mono">{user.rfid}</TableCell>
-              <TableCell>{user.nama}</TableCell>
+              <TableCell className="font-mono">{user.rfidTagId}</TableCell>
+              <TableCell>{user.name}</TableCell>
               <TableCell className="flex gap-2">
                 <EditPenggunaCard pengguna={user} />
                 <Dialog>
@@ -86,4 +95,4 @@ function ListPengguna() {
   );
 }
 
-export default ListPengguna;
+export default ListMember;

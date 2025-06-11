@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -20,9 +20,17 @@ import {
 import { Button } from "@/components/ui/button";
 import EditBukuCard from "../components/EditBukuCard";
 import TambahBukuModal from "../components/TambahBukuModal";
-import dataBuku from "../mocks/dataBuku";
+import BookService from "../services/BookService";
 
 function ListBuku() {
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      await BookService.getBooks().then(v => setBooks(v));
+    })()
+  }, []);
+
   return (
     <div className="">
       <h1 className="font-semibold text-xl">Daftar Buku</h1>
@@ -37,7 +45,7 @@ function ListBuku() {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead className="w-[100px]">RFID</TableHead>
+            <TableHead className="w-[100px]">RFID ID</TableHead>
             <TableHead>Judul</TableHead>
             <TableHead>Pengarang</TableHead>
             <TableHead>ISBN</TableHead>
@@ -47,14 +55,14 @@ function ListBuku() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {dataBuku.map((buku, index) => (
+          {books && books.length ? books.map((buku, index) => (
             <TableRow key={index}>
               <TableCell className="font-medium">{buku.id}</TableCell>
-              <TableCell className="font-medium">{buku.rfid}</TableCell>
-              <TableCell>{buku.judul}</TableCell>
-              <TableCell>{buku.pengarang}</TableCell>
+              <TableCell className="font-medium">{buku.rfidTagId}</TableCell>
+              <TableCell>{buku.title}</TableCell>
+              <TableCell>{buku.author}</TableCell>
               <TableCell>{buku.isbn}</TableCell>
-              <TableCell>{buku.tahun}</TableCell>
+              <TableCell>{buku.publishYear}</TableCell>
               {/* <TableCell>
                 Total: {buku.status.total}
                 <br />
@@ -93,7 +101,7 @@ function ListBuku() {
                 </Dialog>
               </TableCell>
             </TableRow>
-          ))}
+          )) : <></>}
         </TableBody>
       </Table>
     </div>

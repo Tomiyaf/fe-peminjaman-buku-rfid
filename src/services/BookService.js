@@ -52,7 +52,7 @@ class BookService {
 
   async getBooks() {
     try {
-      return (await api.get(`${base}`)).data;
+      return (await api.get(`${base}`)).data.data;
     } catch (e) {
       console.error(e);
     }
