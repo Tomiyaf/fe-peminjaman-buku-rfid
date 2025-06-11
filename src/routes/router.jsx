@@ -3,6 +3,8 @@ import App from "../App.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import ListBuku from "../pages/ListBuku.jsx";
 import ListPengguna from "../pages/ListPengguna.jsx";
+import Peminjaman from "../pages/Peminjaman.jsx";
+import LoginPage from "../pages/LoginPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,7 +22,15 @@ const router = createBrowserRouter([
         path: "list-pengguna",
         element: <ListPengguna />,
       },
+      {
+        path: "peminjaman",
+        element: <Peminjaman />,
+      },
     ],
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   },
 ]);
 

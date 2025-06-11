@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,82 +9,24 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import EditBukuCard from "../components/EditBukuCard";
+import dataBuku from "../mocks/dataBuku";
 
 function ListBuku() {
-  const dataBuku = [
-    {
-      id: "BK001",
-      judul: "Pemrograman Web dengan React",
-      pengarang: "Andi Nugroho",
-      penerbit: "Elex Media Komputindo",
-      tahun: 2022,
-      status: {
-        total: 10,
-        terpinjam: 3,
-        sisa: 7,
-      },
-    },
-    {
-      id: "BK002",
-      judul: "Struktur Data dan Algoritma",
-      pengarang: "Sinta Kurniawati",
-      penerbit: "Gramedia",
-      tahun: 2021,
-      status: {
-        total: 5,
-        terpinjam: 5,
-        sisa: 0,
-      },
-    },
-    {
-      id: "BK003",
-      judul: "Jaringan Komputer Dasar",
-      pengarang: "Budi Santosa",
-      penerbit: "Informatika Bandung",
-      tahun: 2020,
-      status: {
-        total: 7,
-        terpinjam: 2,
-        sisa: 5,
-      },
-    },
-    {
-      id: "BK004",
-      judul: "Kecerdasan Buatan: Teori dan Praktik",
-      pengarang: "Rina Wijaya",
-      penerbit: "Andi Publisher",
-      tahun: 2023,
-      status: {
-        total: 8,
-        terpinjam: 4,
-        sisa: 4,
-      },
-    },
-    {
-      id: "BK005",
-      judul: "Sistem Operasi Modern",
-      pengarang: "Dedi Haryanto",
-      penerbit: "Prenada Media",
-      tahun: 2019,
-      status: {
-        total: 6,
-        terpinjam: 1,
-        sisa: 5,
-      },
-    },
-  ];
-
   return (
     <div className="">
       <h1 className="font-semibold text-xl">Daftar Buku</h1>
       <div className="w-full  flex justify-end">
-        <Button className="hover:cursor-pointer">Tambah Buku Baru +</Button>
+        <Button className="bg-green-500 text-white hover:bg-green-400 hover:text-white hover:cursor-pointer">
+          Tambah Buku Baru +
+        </Button>
       </div>
       <Table>
         <TableCaption>Daftar buku yang sudah ditambahkan</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">ID</TableHead>
+            <TableHead className="w-[100px]">RFID</TableHead>
             <TableHead>Judul</TableHead>
             <TableHead>Pengarang</TableHead>
             <TableHead>Penerbit</TableHead>
@@ -96,6 +39,7 @@ function ListBuku() {
           {dataBuku.map((buku, index) => (
             <TableRow key={index}>
               <TableCell className="font-medium">{buku.id}</TableCell>
+              <TableCell className="font-medium">{buku.rfid}</TableCell>
               <TableCell>{buku.judul}</TableCell>
               <TableCell>{buku.pengarang}</TableCell>
               <TableCell>{buku.penerbit}</TableCell>
@@ -108,7 +52,7 @@ function ListBuku() {
                 Sisa: {buku.status.sisa}
               </TableCell>
               <TableCell>
-                <Button className="hover:cursor-pointer">Edit</Button>
+                <EditBukuCard buku={buku} />
               </TableCell>
             </TableRow>
           ))}

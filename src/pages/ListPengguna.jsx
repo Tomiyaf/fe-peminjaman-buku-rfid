@@ -8,46 +8,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import dataPengguna from "../mocks/dataPengguna";
+import EditPenggunaCard from "../components/EditPenggunaCard";
 
 function ListPengguna() {
-  const dataPengguna = [
-    {
-      id: "USR001",
-      nama: "Andi Nugroho",
-      email: "andi.nugroho@example.com",
-      noTelepon: "081234567890",
-    },
-    {
-      id: "USR002",
-      nama: "Sinta Kurniawati",
-      email: "sinta.kurniawati@example.com",
-      noTelepon: "082345678901",
-    },
-    {
-      id: "USR003",
-      nama: "Budi Santosa",
-      email: "budi.santosa@example.com",
-      noTelepon: "083456789012",
-    },
-    {
-      id: "USR004",
-      nama: "Rina Wijaya",
-      email: "rina.wijaya@example.com",
-      noTelepon: "084567890123",
-    },
-    {
-      id: "USR005",
-      nama: "Dedi Haryanto",
-      email: "dedi.haryanto@example.com",
-      noTelepon: "085678901234",
-    },
-  ];
-
   return (
     <div className="">
       <h1 className="font-semibold text-xl">Daftar Pengguna</h1>
       <div className="w-full  flex justify-end">
-        <Button className="hover:cursor-pointer">Tambah Pengguna Baru +</Button>
+        <Button className="bg-green-500 text-white hover:bg-green-400 hover:text-white hover:cursor-pointer">
+          Tambah Pengguna Baru +
+        </Button>
       </div>
       <Table>
         <TableCaption>Daftar pengguna yang sudah ditambahkan</TableCaption>
@@ -68,7 +39,7 @@ function ListPengguna() {
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.noTelepon}</TableCell>
               <TableCell>
-                <Button className="hover:cursor-pointer">Edit</Button>
+                <EditPenggunaCard pengguna={user} />
               </TableCell>
             </TableRow>
           ))}
