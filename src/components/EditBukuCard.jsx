@@ -90,12 +90,14 @@ function EditBukuCard({ buku }) {
                 Batal
               </Button>
             </DialogClose>
-            <Button
-              type="submit"
-              className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white hover:cursor-pointer"
-            >
-              Simpan
-            </Button>
+            <DialogClose>
+              <Button
+                type="submit"
+                className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white hover:cursor-pointer"
+              >
+                Simpan
+              </Button>
+            </DialogClose>
           </DialogFooter>
         </DialogContent>
       </form>
