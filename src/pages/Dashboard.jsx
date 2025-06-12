@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import RFIDService from "../services/RFIDService";
 
 function Dashboard() {
   const [totalPengunjung, setTotalPengunjung] = useState(0);
@@ -22,6 +23,7 @@ function Dashboard() {
   const [totalBuku, setTotalBuku] = useState(0);
   const [totalBukuTersedia, setTotalBukuTersedia] = useState(0);
   const [totalBukuDipinjam, setTotalBukuDipinjam] = useState(0);
+  const [RFIDs, setRFIDs] = useState([]);
 
   useEffect(() => {
     PengunjungService.getPengunjung().then((r) => {
@@ -32,6 +34,10 @@ function Dashboard() {
         TransactionService.getTransactions().then((res) => {
           setTotalBukuTersedia(r.length - res.length);
           setTotalBukuDipinjam(res.length);
+        });
+        RFIDService.getRFIDs().then(r => {
+          setRFIDs(r);
+          console.log(r.length);
         });
       });
     });
@@ -68,7 +74,7 @@ function Dashboard() {
           <ChartPeminjamanBuku data={dataPeminjamanChart} />
         </div>
         <div className="w-lg h-full overflow-y-scroll rounded-sm shadow-md p-5 mt-10">
-          <TableRFID dataRFID={dataRFID} className="" />
+          <TableRFID dataRFID={RFIDs} className="" />
         </div>
       </div>
     </div>
@@ -90,12 +96,12 @@ function TableRFID({ dataRFID }) {
         </TableRow>
       </TableHeader>
       <TableBody className="">
-        {dataRFID.map((rfid, index) => (
+        {dataRFID && dataRFID.length ? dataRFID.map((rfid, index) => (
           <TableRow key={index}>
             <TableCell className="font-semibold">{rfid.id}</TableCell>
             <TableCell className="flex justify-center">{rfid.uid}</TableCell>
           </TableRow>
-        ))}
+        )) : <></>}
       </TableBody>
     </Table>
   );
