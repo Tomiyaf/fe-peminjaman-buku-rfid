@@ -43,7 +43,7 @@ function ListBuku() {
             <TableHead>ISBN</TableHead>
             <TableHead>Tahun</TableHead>
             {/* <TableHead>Status</TableHead> */}
-            <TableHead>Aksi</TableHead>
+            <TableHead className="w-[150px]">Aksi</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -65,7 +65,7 @@ function ListBuku() {
               <TableCell className="flex gap-2">
                 <EditBukuCard buku={buku} />
                 <Dialog>
-                  <DialogTrigger>
+                  <DialogTrigger asChild>
                     <Button className="bg-red-500 text-white hover:bg-red-400 hover:text-white hover:cursor-pointer">
                       Hapus
                     </Button>

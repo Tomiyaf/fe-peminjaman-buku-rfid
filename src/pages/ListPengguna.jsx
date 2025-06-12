@@ -50,7 +50,7 @@ function ListPengguna() {
               <TableCell className="flex gap-2">
                 <EditPenggunaCard pengguna={user} />
                 <Dialog>
-                  <DialogTrigger>
+                  <DialogTrigger asChild>
                     <Button className="bg-red-500 text-white hover:bg-red-400 hover:text-white hover:cursor-pointer">
                       Hapus
                     </Button>

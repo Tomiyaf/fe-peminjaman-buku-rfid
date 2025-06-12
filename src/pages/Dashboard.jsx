@@ -1,5 +1,16 @@
 import ChartPeminjamanBuku from "../components/ChartPeminjamanBuku";
 import dataPeminjamanChart from "../mocks/dataPeminjamanChart";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import dataRFID from "../mocks/dataRFID";
 
 function Dashboard() {
   return (
@@ -11,28 +22,57 @@ function Dashboard() {
           <span>Total Buku</span>
           <span>10</span>
         </div>
-        <div className="flex flex-col border-l-4 border-blue-500 rounded-sm shadow-md px-10 py-10 w-full">
+        <div className="flex flex-col border-l-4 border-green-500 rounded-sm shadow-md px-10 py-10 w-full">
           <span>Buku Tersedia</span>
           <span>5</span>
         </div>
-        <div className="flex flex-col border-l-4 border-blue-500 rounded-sm shadow-md px-10 py-10 w-full">
+        <div className="flex flex-col border-l-4 border-yellow-500 rounded-sm shadow-md px-10 py-10 w-full">
           <span>Buku Dipinjam</span>
           <span>5</span>
         </div>
-        <div className="flex flex-col border-l-4 border-blue-500 rounded-sm shadow-md px-10 py-10 w-full">
+        <div className="flex flex-col border-l-4 border-purple-500 rounded-sm shadow-md px-10 py-10 w-full">
           <span>Total Member</span>
           <span>9</span>
         </div>
-        <div className="flex flex-col border-l-4 border-blue-500 rounded-sm shadow-md px-10 py-10 w-full">
+        <div className="flex flex-col border-l-4 border-pink-500 rounded-sm shadow-md px-10 py-10 w-full">
           <span>Pengunjung Hari Ini</span>
           <span>9</span>
         </div>
       </div>
-      <div className="w-xl rounded-sm shadow-md p-5 mt-10">
-        <ChartPeminjamanBuku data={dataPeminjamanChart} />
+      <div className="flex justify-around w-full h-80">
+        <div className="h-full max-w-xl w-full rounded-sm shadow-md p-5 mt-10">
+          <ChartPeminjamanBuku data={dataPeminjamanChart} />
+        </div>
+        <div className="w-lg h-full overflow-y-scroll rounded-sm shadow-md p-5 mt-10">
+          <TableRFID dataRFID={dataRFID} className="" />
+        </div>
       </div>
     </div>
   );
 }
 
 export default Dashboard;
+
+function TableRFID({ dataRFID }) {
+  return (
+    <Table className="">
+      {/* <TableCaption>Daftar UID RFID</TableCaption> */}
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-10">No</TableHead>
+          <TableHead className="flex justify-center items-center">
+            UID RFID
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody className="">
+        {dataRFID.map((rfid, index) => (
+          <TableRow key={index}>
+            <TableCell className="">{index + 1}</TableCell>
+            <TableCell className="flex justify-center">{rfid.uid}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
