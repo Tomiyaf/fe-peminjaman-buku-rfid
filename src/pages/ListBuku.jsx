@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -20,9 +20,17 @@ import {
 import { Button } from "@/components/ui/button";
 import EditBukuCard from "../components/EditBukuCard";
 import TambahBukuModal from "../components/TambahBukuModal";
-import dataBuku from "../mocks/dataBuku";
+import BookService from "../services/BookService";
+import RFIDService from "../services/RFIDService";
 
 function ListBuku() {
+  const [books, setBooks] = useState([]);
+  const [update, setUpdate] = useState(0);
+
+  useEffect(() => {
+    BookService.getBooks().then(v => setBooks(v));
+  }, [update]);
+
   return (
     <div className="">
       <h1 className="font-semibold text-xl">Daftar Buku</h1>
@@ -30,14 +38,14 @@ function ListBuku() {
         {/* <Button className="bg-green-500 text-white hover:bg-green-400 hover:text-white hover:cursor-pointer">
           Tambah Buku Baru +
         </Button> */}
-        <TambahBukuModal />
+        <TambahBukuModal onSave={() => setUpdate(update + 1)} />
       </div>
       <Table>
         <TableCaption>Daftar buku yang sudah ditambahkan</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead className="w-[100px]">RFID</TableHead>
+            <TableHead className="w-[100px]">RFID ID</TableHead>
             <TableHead>Judul</TableHead>
             <TableHead>Pengarang</TableHead>
             <TableHead>ISBN</TableHead>
@@ -47,14 +55,14 @@ function ListBuku() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {dataBuku.map((buku, index) => (
+          {books && books.length ? books.map((buku, index) => (
             <TableRow key={index}>
               <TableCell className="font-medium">{buku.id}</TableCell>
-              <TableCell className="font-medium">{buku.rfid}</TableCell>
-              <TableCell>{buku.judul}</TableCell>
-              <TableCell>{buku.pengarang}</TableCell>
+              <TableCell className="font-medium">{buku.rfidTagId}</TableCell>
+              <TableCell>{buku.title}</TableCell>
+              <TableCell>{buku.author}</TableCell>
               <TableCell>{buku.isbn}</TableCell>
-              <TableCell>{buku.tahun}</TableCell>
+              <TableCell>{buku.publishYear}</TableCell>
               {/* <TableCell>
                 Total: {buku.status.total}
                 <br />
@@ -63,7 +71,7 @@ function ListBuku() {
                 Sisa: {buku.status.sisa}
               </TableCell> */}
               <TableCell className="flex gap-2">
-                <EditBukuCard buku={buku} />
+                <EditBukuCard buku={buku} onSave={() => setUpdate(update + 1)} />
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button className="bg-red-500 text-white hover:bg-red-400 hover:text-white hover:cursor-pointer">
@@ -80,9 +88,9 @@ function ListBuku() {
                         <Button
                           variant="destructive"
                           className="bg-red-500 text-white hover:bg-red-400 hover:text-white hover:cursor-pointer"
-                          onClick={() => {
-                            // Logic to delete the book
-                            console.log(`Deleting book with ID: ${buku.id}`);
+                          onClick={async () => {
+                            await BookService.deleteBook(buku.id);
+                            setUpdate(update + 1);
                           }}
                         >
                           Hapus
@@ -93,7 +101,7 @@ function ListBuku() {
                 </Dialog>
               </TableCell>
             </TableRow>
-          ))}
+          )) : <></>}
         </TableBody>
       </Table>
     </div>

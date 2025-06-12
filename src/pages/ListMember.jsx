@@ -1,3 +1,13 @@
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -7,32 +17,32 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import dataMember from "../mocks/dataMember";
+import { useEffect, useState } from "react";
 import EditPenggunaCard from "../components/EditPenggunaCard";
 import TambahMemberModal from "../components/TambahMemberModal";
+import MemberService from "../services/MemberService";
 
-function ListPengguna() {
+function ListMember() {
+  const [users, setUsers] = useState([]);
+  const [update, setUpdate] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      await MemberService.getMembers().then(v => setUsers(v))
+    })()
+  }, [update]);
+
   return (
     <div className="">
-      <h1 className="font-semibold text-xl">Daftar Pengguna</h1>
+      <h1 className="font-semibold text-xl">Daftar Member</h1>
       <div className="w-full flex justify-end">
         {/* <Button className="bg-green-500 text-white hover:bg-green-400 hover:text-white hover:cursor-pointer">
           Tambah Pengguna Baru +
         </Button> */}
-        <TambahMemberModal />
+        <TambahMemberModal onSave={() => setUpdate(update + 1)} />
       </div>
       <Table>
-        <TableCaption>Daftar pengguna yang sudah ditambahkan</TableCaption>
+        <TableCaption>Daftar member yang sudah ditambahkan</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">ID</TableHead>
@@ -42,13 +52,13 @@ function ListPengguna() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {dataMember.map((user, index) => (
+          {users.map((user, index) => (
             <TableRow key={index}>
               <TableCell className="font-medium">{user.id}</TableCell>
-              <TableCell className="font-mono">{user.rfid}</TableCell>
-              <TableCell>{user.nama}</TableCell>
+              <TableCell className="font-mono">{user.rfidTagId}</TableCell>
+              <TableCell>{user.name}</TableCell>
               <TableCell className="flex gap-2">
-                <EditPenggunaCard pengguna={user} />
+                <EditPenggunaCard pengguna={user} onSave={() => setUpdate(update + 1)} />
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button className="bg-red-500 text-white hover:bg-red-400 hover:text-white hover:cursor-pointer">
@@ -66,9 +76,9 @@ function ListPengguna() {
                         <Button
                           variant="destructive"
                           className="bg-red-500 text-white hover:bg-red-400 hover:text-white hover:cursor-pointer"
-                          onClick={() => {
-                            // Logic to delete the book
-                            console.log(`Deleting member with ID: ${user.id}`);
+                          onClick={async () => {
+                            await MemberService.deleteMember(user.id);
+                            setUpdate(update + 1);
                           }}
                         >
                           Hapus
@@ -86,4 +96,4 @@ function ListPengguna() {
   );
 }
 
-export default ListPengguna;
+export default ListMember;

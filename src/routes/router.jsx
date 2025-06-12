@@ -2,9 +2,9 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import ListBuku from "../pages/ListBuku.jsx";
-import ListPengguna from "../pages/ListPengguna.jsx";
-import Peminjaman from "../pages/Peminjaman.jsx";
+import ListMember from "../pages/ListMember.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
+import Peminjaman from "../pages/Peminjaman.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,8 +19,8 @@ const router = createBrowserRouter([
         element: <ListBuku />,
       },
       {
-        path: "list-pengguna",
-        element: <ListPengguna />,
+        path: "list-member",
+        element: <ListMember />,
       },
       {
         path: "peminjaman",

@@ -11,9 +11,23 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import dataRFID from "../mocks/dataRFID";
+import RFIDService from "../services/RFIDService";
+import { useEffect, useState } from "react";
+import BookService from "../services/BookService";
 
-function TambahBukuModal() {
+function TambahBukuModal({ onSave }) {
+  const [rfids, setRfids] = useState([]);
+  const [rfidId, setRfidId] = useState(0);
+  const [update, setUpdate] = useState(0);
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [isbn, setIsbn] = useState("");
+  const [publishYear, setPublishYear] = useState(undefined);
+
+  useEffect(() => {
+    RFIDService.geAvailableRFIDs().then(r => setRfids(r));
+  }, [update]);
+
   return (
     <Dialog>
       <form>
@@ -41,27 +55,28 @@ function TambahBukuModal() {
                 name="uid"
                 className="border rounded px-2 py-1"
                 required
+                onChange={e => setRfidId(e.target.value)}
               >
                 <option value="">Pilih UID RFID</option>
-                {dataRFID.map((item, idx) => (
-                  <option key={item.uid} value={item.uid}>
+                {rfids && rfids.length ? rfids.map(item => (
+                  <option key={item.uid} value={item.id}>
                     {item.uid}
                   </option>
-                ))}
+                )) : <></>}
               </select>
             </div>
             {/* ...field lainnya... */}
             <div className="grid gap-3">
               <Label htmlFor="judul">Judul</Label>
-              <Input id="judul" name="judul" />
+              <Input id="judul" name="judul" value={title} onChange={e => setTitle(e.target.value)} />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="pengarang">Pengarang</Label>
-              <Input id="pengarang" name="pengarang" />
+              <Input id="pengarang" name="pengarang" value={author} onChange={e => setAuthor(e.target.value)} />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="isbn">ISBN</Label>
-              <Input id="isbn" name="isbn" />
+              <Input id="isbn" name="isbn" value={isbn} onChange={e => setIsbn(e.target.value)} />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="tahunTerbit">Tahun Terbit</Label>
@@ -71,6 +86,8 @@ function TambahBukuModal() {
                 type="number"
                 min={1900}
                 max={2100}
+                value={publishYear} 
+                onChange={e => setPublishYear(e.target.value)}
               />
             </div>
             {/* <div className="grid gap-3">
@@ -91,6 +108,17 @@ function TambahBukuModal() {
               <Button
                 type="submit"
                 className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white hover:cursor-pointer"
+                onClick={async () => {
+                  await BookService.createBook({
+                    title: title,
+                    author: author,
+                    publishYear: publishYear,
+                    isbn: isbn,
+                    rfidTagId: rfidId
+                  });
+                  setUpdate(update + 1);
+                  onSave();
+                }}
               >
                 Simpan
               </Button>
