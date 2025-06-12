@@ -56,7 +56,7 @@ export default Dashboard;
 function TableRFID({ dataRFID }) {
   return (
     <Table className="">
-      {/* <TableCaption>Daftar UID RFID</TableCaption> */}
+      <TableCaption>Daftar UID RFID yang Belum Terdaftar</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-10">ID</TableHead>
