@@ -59,7 +59,7 @@ function TableRFID({ dataRFID }) {
       {/* <TableCaption>Daftar UID RFID</TableCaption> */}
       <TableHeader>
         <TableRow>
-          <TableHead className="w-10">No</TableHead>
+          <TableHead className="w-10">ID</TableHead>
           <TableHead className="flex justify-center items-center">
             UID RFID
           </TableHead>
@@ -68,7 +68,7 @@ function TableRFID({ dataRFID }) {
       <TableBody className="">
         {dataRFID.map((rfid, index) => (
           <TableRow key={index}>
-            <TableCell className="">{index + 1}</TableCell>
+            <TableCell className="font-semibold">{rfid.id}</TableCell>
             <TableCell className="flex justify-center">{rfid.uid}</TableCell>
           </TableRow>
         ))}
