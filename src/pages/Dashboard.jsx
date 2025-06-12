@@ -1,7 +1,15 @@
+import { useEffect, useState } from "react";
 import ChartPeminjamanBuku from "../components/ChartPeminjamanBuku";
 import dataPeminjamanChart from "../mocks/dataPeminjamanChart";
+import PengunjungService from "../services/PengunjungService";
 
 function Dashboard() {
+  const [totalPengunjung, setTotalPengunjung] = useState(0);
+
+  useEffect(() => {
+    PengunjungService.getPengunjung().then(r => setTotalPengunjung(r.total));
+  }, []);
+
   return (
     // <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
     <div>
@@ -25,7 +33,7 @@ function Dashboard() {
         </div>
         <div className="flex flex-col border-l-4 border-blue-500 rounded-sm shadow-md px-10 py-10 w-full">
           <span>Pengunjung Hari Ini</span>
-          <span>9</span>
+          <span>{totalPengunjung}</span>
         </div>
       </div>
       <div className="w-xl rounded-sm shadow-md p-5 mt-10">
