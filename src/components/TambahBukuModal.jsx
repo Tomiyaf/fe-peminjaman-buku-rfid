@@ -23,13 +23,30 @@ function TambahBukuModal({ onSave }) {
   const [author, setAuthor] = useState("");
   const [isbn, setIsbn] = useState("");
   const [publishYear, setPublishYear] = useState("");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     RFIDService.getAvailableRFIDs().then((r) => setRfids(r));
   }, [update]);
 
+  const resetForm = () => {
+    setRfidId(0);
+    setTitle("");
+    setAuthor("");
+    setIsbn("");
+    setPublishYear("");
+  };
+
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(val) => {
+        setOpen(val);
+        if (!val) {
+          resetForm();
+        }
+      }}
+    >
       <form>
         <DialogTrigger asChild>
           <Button
@@ -109,10 +126,6 @@ function TambahBukuModal({ onSave }) {
                 onChange={(e) => setPublishYear(e.target.value)}
               />
             </div>
-            {/* <div className="grid gap-3">
-              <Label htmlFor="total">Total</Label>
-              <Input id="total" name="total" type="number" min={0} max={9999} />
-            </div> */}
           </div>
           <DialogFooter>
             <DialogClose asChild>

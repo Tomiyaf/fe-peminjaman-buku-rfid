@@ -12,16 +12,18 @@ import { useEffect, useState } from "react";
 import TransactionService from "../services/TransactionService";
 
 function formatDate(date) {
-  return new Intl.DateTimeFormat('in-ID', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
+  return new Intl.DateTimeFormat("in-ID", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
     hour12: false,
-    timeZone: "UTC"
-  }).format(new Date(date)).toString();
+    timeZone: "UTC",
+  })
+    .format(new Date(date))
+    .toString();
 }
 
 function mapStatus(status) {
@@ -39,7 +41,8 @@ function Peminjaman() {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    TransactionService.getTransactions().then(r => setTransactions(r));
+    TransactionService.getTransactions().then((r) => setTransactions(r));
+    console.log(transactions);
   }, []);
 
   return (
@@ -68,7 +71,9 @@ function Peminjaman() {
               <TableCell>{item.book.title}</TableCell>
               <TableCell>{mapStatus(item.status)}</TableCell>
               <TableCell>{formatDate(item.borrowDate)}</TableCell>
-              <TableCell>{item.returnDate ? formatDate(item.returnDate) : "-"}</TableCell>
+              <TableCell>
+                {item.returnDate ? formatDate(item.returnDate) : "-"}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

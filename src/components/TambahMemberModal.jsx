@@ -20,6 +20,7 @@ function TambahMemberModal({ onSave }) {
   const [name, setName] = useState("");
   const [rfidId, setRfidId] = useState(0);
   const [update, setUpdate] = useState(0);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -27,8 +28,21 @@ function TambahMemberModal({ onSave }) {
     })();
   }, [update]);
 
+  const resetForm = () => {
+    setName("");
+    setRfidId(0);
+  };
+
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(val) => {
+        setOpen(val);
+        if (!val) {
+          resetForm();
+        }
+      }}
+    >
       <form>
         <DialogTrigger asChild>
           <Button
