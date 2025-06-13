@@ -5,6 +5,7 @@ import PengunjungService from "../services/PengunjungService";
 import MemberService from "../services/MemberService";
 import BookService from "../services/BookService";
 import TransactionService from "../services/TransactionService";
+import RFIDService from "../services/RFIDService";
 import {
   Table,
   TableBody,
@@ -22,6 +23,7 @@ function Dashboard() {
   const [totalBuku, setTotalBuku] = useState(0);
   const [totalBukuTersedia, setTotalBukuTersedia] = useState(0);
   const [totalBukuDipinjam, setTotalBukuDipinjam] = useState(0);
+  const [dataRFID, setDataRFID] = useState([]);
 
   useEffect(() => {
     PengunjungService.getPengunjung().then((r) => {
@@ -34,6 +36,12 @@ function Dashboard() {
           setTotalBukuDipinjam(res.length);
         });
       });
+    });
+  }, []);
+
+  useEffect(() => {
+    RFIDService.getAvailableRFIDs().then((r) => {
+      setDataRFID(r);
     });
   }, []);
 
