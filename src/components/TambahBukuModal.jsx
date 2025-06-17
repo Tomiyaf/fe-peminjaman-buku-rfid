@@ -22,14 +22,31 @@ function TambahBukuModal({ onSave }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [isbn, setIsbn] = useState("");
-  const [publishYear, setPublishYear] = useState(undefined);
+  const [publishYear, setPublishYear] = useState("");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    RFIDService.geAvailableRFIDs().then(r => setRfids(r));
+    RFIDService.getAvailableRFIDs().then((r) => setRfids(r));
   }, [update]);
 
+  const resetForm = () => {
+    setRfidId(0);
+    setTitle("");
+    setAuthor("");
+    setIsbn("");
+    setPublishYear("");
+  };
+
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(val) => {
+        setOpen(val);
+        if (!val) {
+          resetForm();
+        }
+      }}
+    >
       <form>
         <DialogTrigger asChild>
           <Button
@@ -55,28 +72,47 @@ function TambahBukuModal({ onSave }) {
                 name="uid"
                 className="border rounded px-2 py-1"
                 required
-                onChange={e => setRfidId(e.target.value)}
+                onChange={(e) => setRfidId(e.target.value)}
               >
                 <option value="">Pilih UID RFID</option>
-                {rfids && rfids.length ? rfids.map(item => (
-                  <option key={item.uid} value={item.id}>
-                    {item.uid}
-                  </option>
-                )) : <></>}
+                {rfids && rfids.length ? (
+                  rfids.map((item) => (
+                    <option key={item.uid} value={item.id}>
+                      {item.uid}
+                    </option>
+                  ))
+                ) : (
+                  <></>
+                )}
               </select>
             </div>
             {/* ...field lainnya... */}
             <div className="grid gap-3">
               <Label htmlFor="judul">Judul</Label>
-              <Input id="judul" name="judul" value={title} onChange={e => setTitle(e.target.value)} />
+              <Input
+                id="judul"
+                name="judul"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="pengarang">Pengarang</Label>
-              <Input id="pengarang" name="pengarang" value={author} onChange={e => setAuthor(e.target.value)} />
+              <Input
+                id="pengarang"
+                name="pengarang"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+              />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="isbn">ISBN</Label>
-              <Input id="isbn" name="isbn" value={isbn} onChange={e => setIsbn(e.target.value)} />
+              <Input
+                id="isbn"
+                name="isbn"
+                value={isbn}
+                onChange={(e) => setIsbn(e.target.value)}
+              />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="tahunTerbit">Tahun Terbit</Label>
@@ -86,14 +122,10 @@ function TambahBukuModal({ onSave }) {
                 type="number"
                 min={1900}
                 max={2100}
-                value={publishYear} 
-                onChange={e => setPublishYear(e.target.value)}
+                value={publishYear}
+                onChange={(e) => setPublishYear(e.target.value)}
               />
             </div>
-            {/* <div className="grid gap-3">
-              <Label htmlFor="total">Total</Label>
-              <Input id="total" name="total" type="number" min={0} max={9999} />
-            </div> */}
           </div>
           <DialogFooter>
             <DialogClose asChild>
@@ -104,7 +136,7 @@ function TambahBukuModal({ onSave }) {
                 Batal
               </Button>
             </DialogClose>
-            <DialogClose>
+            <DialogClose asChild>
               <Button
                 type="submit"
                 className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white hover:cursor-pointer"
@@ -114,7 +146,7 @@ function TambahBukuModal({ onSave }) {
                     author: author,
                     publishYear: publishYear,
                     isbn: isbn,
-                    rfidTagId: rfidId
+                    rfidTagId: rfidId,
                   });
                   setUpdate(update + 1);
                   onSave();

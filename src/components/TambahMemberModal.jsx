@@ -20,15 +20,29 @@ function TambahMemberModal({ onSave }) {
   const [name, setName] = useState("");
   const [rfidId, setRfidId] = useState(0);
   const [update, setUpdate] = useState(0);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     (async () => {
-      await RFIDService.geAvailableRFIDs().then(r => setRfids(r));
-    })()
+      await RFIDService.getAvailableRFIDs().then((r) => setRfids(r));
+    })();
   }, [update]);
 
+  const resetForm = () => {
+    setName("");
+    setRfidId(0);
+  };
+
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(val) => {
+        setOpen(val);
+        if (!val) {
+          resetForm();
+        }
+      }}
+    >
       <form>
         <DialogTrigger asChild>
           <Button
@@ -53,24 +67,33 @@ function TambahMemberModal({ onSave }) {
               name="rfid"
               className="border rounded px-2 py-1"
               required
-              onChange={e => {
+              onChange={(e) => {
                 const id = e.target.value;
                 console.log(id);
-                setRfidId(id)
+                setRfidId(id);
               }}
             >
               <option value="">Pilih UID RFID</option>
-              {rfids && rfids.length ? rfids.map((item) => (
-                <option key={item.uid} value={item.id}>
-                  {item.uid}
-                </option>
-              )) : <></>}
+              {rfids && rfids.length ? (
+                rfids.map((item) => (
+                  <option key={item.uid} value={item.id}>
+                    {item.uid}
+                  </option>
+                ))
+              ) : (
+                <></>
+              )}
             </select>
           </div>
           <div className="grid gap-4">
             <div className="grid gap-3">
               <Label htmlFor="nama">Nama</Label>
-              <Input id="nama" name="nama" value={name} onChange={e => setName(e.target.value)} />
+              <Input
+                id="nama"
+                name="nama"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
           </div>
           <DialogFooter>
@@ -82,7 +105,7 @@ function TambahMemberModal({ onSave }) {
                 Batal
               </Button>
             </DialogClose>
-            <DialogClose>
+            <DialogClose asChild>
               <Button
                 type="submit"
                 className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white hover:cursor-pointer"
@@ -92,9 +115,11 @@ function TambahMemberModal({ onSave }) {
                     memberId: (() => {
                       const array = new Uint8Array(15);
                       crypto.getRandomValues(array);
-                      return btoa(String.fromCharCode(...array)).replace(/[^a-zA-Z0-9]/g, '').slice(0, 20);
+                      return btoa(String.fromCharCode(...array))
+                        .replace(/[^a-zA-Z0-9]/g, "")
+                        .slice(0, 20);
                     })(),
-                    rfidTagId: rfidId
+                    rfidTagId: rfidId,
                   });
                   setUpdate(update + 1);
                   onSave();

@@ -11,7 +11,7 @@ class RFIDService {
     }
   }
 
-  async geAvailableRFIDs() {
+  async getAvailableRFIDs() {
     try {
       return (await api.get(`${base}/available`)).data;
     } catch (e) {
