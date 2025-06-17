@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import RFIDService from "../services/RFIDService";
+import mqtt from "mqtt";
 
 function Dashboard() {
   const [totalPengunjung, setTotalPengunjung] = useState(0);
@@ -24,8 +25,30 @@ function Dashboard() {
   const [totalBukuTersedia, setTotalBukuTersedia] = useState(0);
   const [totalBukuDipinjam, setTotalBukuDipinjam] = useState(0);
   const [RFIDs, setRFIDs] = useState([]);
+  const [update, setUpdate] = useState(0);
 
   useEffect(() => {
+    const options = {
+      connectTimeout: 4000,
+      keepalive: 60,
+      clean: true,
+    };
+    const client = mqtt.connect("ws://192.168.14.155:9001", options);
+    client.on('connect', () => {
+      console.log('Connected to MQTT broker');
+      client.subscribe('client/update', (err) => {
+        if (!err) {
+          console.log('Subscribed to client/update');
+        }
+      });
+    });
+
+    client.on("message", (t, _) => {
+      if (t == "client/update") {
+        setUpdate(update + 1);
+      }
+    });
+
     PengunjungService.getPengunjung().then((r) => {
       setTotalPengunjung(r.total);
       MemberService.getMembers().then((r) => setTotalMember(r.length));
@@ -41,7 +64,7 @@ function Dashboard() {
         });
       });
     });
-  }, []);
+  }, [update]);
 
   return (
     // <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
