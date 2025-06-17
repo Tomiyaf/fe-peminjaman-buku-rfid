@@ -5,6 +5,7 @@ import PengunjungService from "../services/PengunjungService";
 import MemberService from "../services/MemberService";
 import BookService from "../services/BookService";
 import TransactionService from "../services/TransactionService";
+import RFIDService from "../services/RFIDService";
 import {
   Table,
   TableBody,
@@ -65,6 +66,12 @@ function Dashboard() {
       });
     });
   }, [update]);
+
+  useEffect(() => {
+    RFIDService.getAvailableRFIDs().then((r) => {
+      setDataRFID(r);
+    });
+  }, []);
 
   return (
     // <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
