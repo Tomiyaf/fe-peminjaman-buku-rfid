@@ -1,22 +1,21 @@
-import { useEffect, useState } from "react";
-import ChartPeminjamanBuku from "../components/ChartPeminjamanBuku";
-import dataPeminjamanChart from "../mocks/dataPeminjamanChart";
-import PengunjungService from "../services/PengunjungService";
-import MemberService from "../services/MemberService";
-import BookService from "../services/BookService";
-import TransactionService from "../services/TransactionService";
-import RFIDService from "../services/RFIDService";
 import {
   Table,
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import mqtt from "mqtt";
+import { useEffect, useState } from "react";
+import ChartPeminjamanBuku from "../components/ChartPeminjamanBuku";
+import dataPeminjamanChart from "../mocks/dataPeminjamanChart";
+import BookService from "../services/BookService";
+import MemberService from "../services/MemberService";
+import PengunjungService from "../services/PengunjungService";
+import RFIDService from "../services/RFIDService";
+import TransactionService from "../services/TransactionService";
 
 function Dashboard() {
   const [totalPengunjung, setTotalPengunjung] = useState(0);
@@ -33,7 +32,7 @@ function Dashboard() {
       keepalive: 60,
       clean: true,
     };
-    const client = mqtt.connect("ws://192.168.14.155:9001", options);
+    const client = mqtt.connect(`ws://${import.meta.env.VITE_MQTT_HOST}:9001`, options);
     client.on('connect', () => {
       console.log('Connected to MQTT broker');
       client.subscribe('client/update', (err) => {
@@ -55,8 +54,9 @@ function Dashboard() {
       BookService.getBooks().then((r) => {
         setTotalBuku(r.length);
         TransactionService.getTransactions().then((res) => {
-          setTotalBukuTersedia(r.length - res.length);
-          setTotalBukuDipinjam(res.length);
+          const borrowed = res.filter(t => t.status === "borrowed").length;
+          setTotalBukuTersedia(r.length - borrowed);
+          setTotalBukuDipinjam(borrowed);
         });
         RFIDService.getRFIDs().then(r => {
           setRFIDs(r);
@@ -65,12 +65,6 @@ function Dashboard() {
       });
     });
   }, [update]);
-
-  useEffect(() => {
-    RFIDService.getAvailableRFIDs().then((r) => {
-      setDataRFID(r);
-    });
-  }, []);
 
   return (
     // <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
