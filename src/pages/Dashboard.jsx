@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import mqtt from "mqtt";
 
 function Dashboard() {
   const [totalPengunjung, setTotalPengunjung] = useState(0);
@@ -23,9 +24,31 @@ function Dashboard() {
   const [totalBuku, setTotalBuku] = useState(0);
   const [totalBukuTersedia, setTotalBukuTersedia] = useState(0);
   const [totalBukuDipinjam, setTotalBukuDipinjam] = useState(0);
-  const [dataRFID, setDataRFID] = useState([]);
+  const [RFIDs, setRFIDs] = useState([]);
+  const [update, setUpdate] = useState(0);
 
   useEffect(() => {
+    const options = {
+      connectTimeout: 4000,
+      keepalive: 60,
+      clean: true,
+    };
+    const client = mqtt.connect("ws://192.168.14.155:9001", options);
+    client.on('connect', () => {
+      console.log('Connected to MQTT broker');
+      client.subscribe('client/update', (err) => {
+        if (!err) {
+          console.log('Subscribed to client/update');
+        }
+      });
+    });
+
+    client.on("message", (t, _) => {
+      if (t == "client/update") {
+        setUpdate(update + 1);
+      }
+    });
+
     PengunjungService.getPengunjung().then((r) => {
       setTotalPengunjung(r.total);
       MemberService.getMembers().then((r) => setTotalMember(r.length));
@@ -35,9 +58,13 @@ function Dashboard() {
           setTotalBukuTersedia(r.length - res.length);
           setTotalBukuDipinjam(res.length);
         });
+        RFIDService.getRFIDs().then(r => {
+          setRFIDs(r);
+          console.log(r.length);
+        });
       });
     });
-  }, []);
+  }, [update]);
 
   useEffect(() => {
     RFIDService.getAvailableRFIDs().then((r) => {
@@ -76,7 +103,7 @@ function Dashboard() {
           <ChartPeminjamanBuku data={dataPeminjamanChart} />
         </div>
         <div className="w-lg h-full overflow-y-scroll rounded-sm shadow-md p-5 mt-10">
-          <TableRFID dataRFID={dataRFID} className="" />
+          <TableRFID dataRFID={RFIDs} className="" />
         </div>
       </div>
     </div>
@@ -98,12 +125,12 @@ function TableRFID({ dataRFID }) {
         </TableRow>
       </TableHeader>
       <TableBody className="">
-        {dataRFID.map((rfid, index) => (
+        {dataRFID && dataRFID.length ? dataRFID.map((rfid, index) => (
           <TableRow key={index}>
             <TableCell className="font-semibold">{rfid.id}</TableCell>
             <TableCell className="flex justify-center">{rfid.uid}</TableCell>
           </TableRow>
-        ))}
+        )) : <></>}
       </TableBody>
     </Table>
   );
