@@ -20,38 +20,39 @@ ChartJS.register(
   Legend
 );
 
-function getMonthRange(transactions) {
-  if (!transactions.length) return [];
-  const dates = transactions.map((t) => new Date(t.borrowDate));
-  const minDate = new Date(Math.min(...dates));
-  const maxDate = new Date(Math.max(...dates));
-  minDate.setDate(1);
-  maxDate.setDate(1);
+const monthNames = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
 
-  const months = [];
-  let current = new Date(minDate);
-  while (current <= maxDate) {
-    months.push(
-      current.toLocaleString("id-ID", { month: "long", year: "numeric" })
-    );
-    current.setMonth(current.getMonth() + 1);
-  }
-  return months;
-}
+const currentYear = new Date().getFullYear();
 
 function ChartPeminjamanBuku() {
   const [dataChart, setDataChart] = useState([]);
 
   useEffect(() => {
     TransactionService.getTransactions().then((transactions) => {
-      // 1. Hitung jumlah peminjaman per bulan
+      // Filter hanya transaksi di tahun ini
+      const filtered = transactions.filter((trx) => {
+        const date = new Date(trx.borrowDate);
+        return date.getFullYear() === currentYear;
+      });
+
+      // Hitung jumlah peminjaman per bulan
       const peminjamanPerBulan = {};
-      transactions.forEach((transaction) => {
-        const date = new Date(transaction.borrowDate);
-        const month = date.toLocaleString("id-ID", {
-          month: "long",
-          year: "numeric",
-        });
+      filtered.forEach((trx) => {
+        const date = new Date(trx.borrowDate);
+        const month = date.getMonth(); // 0-11
         if (!peminjamanPerBulan[month]) {
           peminjamanPerBulan[month] = 1;
         } else {
@@ -59,13 +60,10 @@ function ChartPeminjamanBuku() {
         }
       });
 
-      // 2. Buat array semua bulan dalam rentang data
-      const allMonths = getMonthRange(transactions);
-
-      // 3. Gabungkan, jika tidak ada peminjaman isi 0
-      const dataChart = allMonths.map((bulan) => ({
+      // Map ke semua bulan, jika tidak ada isi 0
+      const dataChart = monthNames.map((bulan, idx) => ({
         bulan,
-        jumlah_peminjaman: peminjamanPerBulan[bulan] || 0,
+        jumlah_peminjaman: peminjamanPerBulan[idx] || 0,
       }));
 
       setDataChart(dataChart);

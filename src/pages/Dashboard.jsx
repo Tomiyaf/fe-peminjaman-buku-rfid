@@ -5,7 +5,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/ui/table";
 import mqtt from "mqtt";
 import { useEffect, useState } from "react";
@@ -32,12 +32,15 @@ function Dashboard() {
       keepalive: 60,
       clean: true,
     };
-    const client = mqtt.connect(`ws://${import.meta.env.VITE_MQTT_HOST}:9001`, options);
-    client.on('connect', () => {
-      console.log('Connected to MQTT broker');
-      client.subscribe('client/update', (err) => {
+    const client = mqtt.connect(
+      `ws://${import.meta.env.VITE_MQTT_HOST}:9001`,
+      options
+    );
+    client.on("connect", () => {
+      console.log("Connected to MQTT broker");
+      client.subscribe("client/update", (err) => {
         if (!err) {
-          console.log('Subscribed to client/update');
+          console.log("Subscribed to client/update");
         }
       });
     });
@@ -54,11 +57,11 @@ function Dashboard() {
       BookService.getBooks().then((r) => {
         setTotalBuku(r.length);
         TransactionService.getTransactions().then((res) => {
-          const borrowed = res.filter(t => t.status === "borrowed").length;
+          const borrowed = res.filter((t) => t.status === "borrowed").length;
           setTotalBukuTersedia(r.length - borrowed);
           setTotalBukuDipinjam(borrowed);
         });
-        RFIDService.getRFIDs().then(r => {
+        RFIDService.getRFIDs().then((r) => {
           setRFIDs(r);
           console.log(r.length);
         });
@@ -119,12 +122,16 @@ function TableRFID({ dataRFID }) {
         </TableRow>
       </TableHeader>
       <TableBody className="">
-        {dataRFID && dataRFID.length ? dataRFID.map((rfid, index) => (
-          <TableRow key={index}>
-            <TableCell className="font-semibold">{rfid.id}</TableCell>
-            <TableCell className="flex justify-center">{rfid.uid}</TableCell>
-          </TableRow>
-        )) : <></>}
+        {dataRFID && dataRFID.length ? (
+          dataRFID.map((rfid, index) => (
+            <TableRow key={index}>
+              <TableCell className="font-semibold">{rfid.id}</TableCell>
+              <TableCell className="flex justify-center">{rfid.uid}</TableCell>
+            </TableRow>
+          ))
+        ) : (
+          <></>
+        )}
       </TableBody>
     </Table>
   );
